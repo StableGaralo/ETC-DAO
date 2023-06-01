@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Basic DAO UI</title>
+  <style>
+    /* Add some basic styling to your UI */
+    /* ... */
+  </style>
+</head>
+<body>
+  <h1>Basic DAO UI</h1>
+  
+  <h2>Deposit Ether</h2>
+  <input id="depositAmount" type="number" placeholder="Amount" />
+  <button onclick="deposit()">Deposit</button>
+  
+  <h2>Withdraw Ether</h2>
+  <input id="withdrawAmount" type="number" placeholder="Amount" />
+  <button onclick="withdraw()">Withdraw</button>
+  
+  <h2>Transfer Ether</h2>
+  <input id="recipientAddress" type="text" placeholder="Recipient Address" />
+  <input id="transferAmount" type="number" placeholder="Amount" />
+  <button onclick="transfer()">Transfer</button>
+  
+  <h2>Account Balance</h2>
+  <p id="balance"></p>
+  
+  <script src="web3.min.js"></script>
+  <script>
+    // Initialize Web3.js
+    // Connect to the Ethereum network and unlock an account to interact with the DAO contract
+    // ...
+    
+    const contractAddress = '<your_dao_contract_address>';
+    const contractABI = [
+      // The ABI of your DAO contract
+      // ...
+    ];
+    
+    const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+    
+    async function deposit() {
+      const amount = document.getElementById('depositAmount').value;
+      await contractInstance.methods.deposit().send({ value: amount });
+    }
+    
+    async function withdraw() {
+      const amount = document.getElementById('withdrawAmount').value;
+      await contractInstance.methods.withdraw(amount).send();
+    }
+    
+    async function transfer() {
+      const recipient = document.getElementById('recipientAddress').value;
+      const amount = document.getElementById('transferAmount').value;
+      await contractInstance.methods.transfer(recipient, amount).send();
+    }
+    
+    async function getBalance() {
+      const account = await web3.eth.getAccounts()[0];
+      const balance = await contractInstance.methods.getBalance(account).call();
+      document.getElementById('balance').innerText = balance;
+    }
+    
+    getBalance(); // Retrieve and display the initial account balance
+  </script>
+</body>
+</html>
